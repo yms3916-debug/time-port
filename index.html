@@ -1,149 +1,459 @@
 
+
 <!DOCTYPE html>
+
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="theme-color" content="#080d18">
-<title>TIMEPORT - Your Memories, Across Time</title>
+
+<title>TIMEPORT</title>
+
 <style>
+
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,"Arial",sans-serif}
-header{padding:30px 22px 20px;text-align:center}
-.logo{font-size:30px;font-weight:900;letter-spacing:4px;color:#e9c77b}
-.sub{color:#9da7ba;font-size:13px;margin-top:8px}
-main{padding:12px 18px 50px;max-width:700px;margin:auto}
-.panel{background:#111a2b;border:1px solid #26334a;border-radius:20px;padding:20px;margin-bottom:18px}
-h2{font-size:18px;margin:0 0 16px}
-.upload{display:block;text-align:center;padding:30px 15px;border:1px dashed #687b9c;border-radius:15px;color:#c7d2e5}
+
+body{margin:0;background:#080d18;color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+
+header{text-align:center;padding:28px 15px}
+
+.logo{font-size:32px;font-weight:900;letter-spacing:5px;color:#e9c77b}
+
+.sub{font-size:12px;color:#9da7ba;margin-top:8px}
+
+main{max-width:700px;margin:auto;padding:10px 16px 45px}
+
+.panel{background:#111a2b;border:1px solid #26334a;border-radius:18px;padding:18px;margin-bottom:16px}
+
+h2{font-size:17px;margin:0 0 14px}
+
+p{font-size:13px;color:#9da7ba;line-height:1.65}
+
+input,select,textarea,button{font:inherit}
+
+.upload{display:block;padding:25px 12px;text-align:center;border:1px dashed #71809b;border-radius:13px;color:#d8b66b}
+
 .upload input{display:block;margin:15px auto 0;max-width:100%}
-select,button{font-size:15px;border:0;border-radius:12px;padding:13px}
-select{background:#202d43;color:white;width:100%}
-button{background:#d8b66b;color:#101522;font-weight:800;cursor:pointer}
-button:disabled{opacity:.4}
-.eras{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.era{background:#202d43;color:#dce4f2;border:1px solid #35445e;padding:12px 4px;border-radius:10px}
-.era.active{background:#d8b66b;color:#101522;border-color:#d8b66b}
-#results{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.result{background:#111a2b;border:1px solid #26334a;border-radius:14px;padding:9px;min-width:0}
-.result canvas{width:100%;height:auto;border-radius:8px;display:block}
-.result strong{display:block;text-align:center;padding:9px 0;font-size:14px}
-.result button{width:100%;font-size:12px;padding:10px}
-#preview{display:none;width:100%;border-radius:12px;margin-top:15px}
-.note{font-size:12px;color:#8d9bb2;line-height:1.6}
-.action{width:100%;margin-top:16px}
+
+#preview{display:none;width:100%;max-height:350px;object-fit:contain;margin-top:14px;border-radius:12px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+button{border:0;border-radius:10px;padding:12px 5px;background:#253650;color:#fff;font-size:13px;cursor:pointer}
+
+button.active{background:#d8b66b;color:#101522;font-weight:800}
+
+.mainbtn{width:100%;background:#d8b66b;color:#101522;font-weight:800;margin-top:14px;padding:14px}
+
+select,textarea{width:100%;padding:12px;border-radius:10px;background:#202d43;color:#fff;border:1px solid #435673;margin:8px 0}
+
+textarea{min-height:75px;resize:vertical}
+
+#results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
+.result{background:#0b1322;padding:8px;border-radius:12px;min-width:0}
+
+.result canvas{width:100%;height:auto;border-radius:8px}
+
+.result strong{display:block;text-align:center;font-size:12px;padding:8px 0}
+
+.result button{width:100%}
+
+.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b1322;padding:14px;border:1px solid #34445f;border-radius:12px;min-height:100px;font-size:13px;line-height:1.7;color:#e5eaf2}
+
 footer{text-align:center;color:#718098;font-size:11px;padding:20px}
+
+@media(max-width:360px){.grid{grid-template-columns:repeat(2,1fr)}}
+
 </style>
+
 </head>
+
 <body>
+
 <header>
+
 <div class="logo">TIMEPORT</div>
+
 <div class="sub">YOUR MEMORIES, ACROSS TIME</div>
+
 </header>
+
 <main>
+
 <section class="panel">
+
 <h2>01. 사진 업로드</h2>
+
 <label class="upload">
-사진을 선택하고 과거의 시간으로 여행하세요
+
+사진을 선택하고 시간 여행을 시작하세요
+
 <input type="file" id="photo" accept="image/*">
+
 </label>
-<img id="preview" alt="업로드 사진 미리보기">
+
+<img id="preview" alt="업로드 사진">
+
 </section>
 
 <section class="panel">
-<h2>02. 시간 선택</h2>
-<div class="eras" id="eras">
-<button class="era active" data-year="1950">1950년대</button>
-<button class="era active" data-year="1960">1960년대</button>
-<button class="era active" data-year="1970">1970년대</button>
-<button class="era active" data-year="1980">1980년대</button>
-<button class="era active" data-year="1990">1990년대</button>
-<button class="era active" data-year="2000">2000년대</button>
-<button class="era active" data-year="2010">2010년대</button>
-<button class="era active" data-year="2020">2020년대</button>
+
+<h2>02. 시대별 사진 만들기</h2>
+
+<p>원하는 시대를 선택하면 시대별 색감 필터를 적용할 수 있어요.</p>
+
+<div class="grid" id="eras">
+
+<button data-year="1950">1950년대</button>
+
+<button data-year="1960">1960년대</button>
+
+<button data-year="1970">1970년대</button>
+
+<button data-year="1980">1980년대</button>
+
+<button data-year="1990">1990년대</button>
+
+<button data-year="2000">2000년대</button>
+
+<button data-year="2010">2010년대</button>
+
+<button data-year="2020" class="active">2020년대</button>
+
 </div>
-<button class="action" id="generate">선택한 시대 비교하기</button>
+
+<button class="mainbtn" id="generate">선택 시대 사진 비교하기</button>
+
 </section>
 
 <section class="panel">
-<h2>03. 시간 여행 결과</h2>
+
+<h2>03. 나이 변화 시뮬레이션</h2>
+
+<p>원하는 나이대를 선택해 AI 이미지 변환 요청문을 만들어 보세요.</p>
+
+<div class="grid" id="ages">
+
+<button data-age="10대">10대</button>
+
+<button data-age="20대">20대</button>
+
+<button data-age="30대">30대</button>
+
+<button data-age="40대">40대</button>
+
+<button data-age="50대">50대</button>
+
+<button data-age="60대">60대</button>
+
+<button data-age="70대">70대</button>
+
+<button data-age="80대">80대</button>
+
+</div>
+
+<button class="mainbtn" id="agePrompt">나이 변화 요청문 만들기</button>
+
+</section>
+
+<section class="panel">
+
+<h2>04. 과거 의상과 배경 재현</h2>
+
+<p>사진 속 인물을 과거 시대에 맞게 재구성하는 AI 요청문을 생성합니다.</p>
+
+<select id="era">
+
+<option>1950년대</option>
+
+<option>1960년대</option>
+
+<option>1970년대</option>
+
+<option>1980년대</option>
+
+<option>1990년대</option>
+
+<option>2000년대</option>
+
+<option>2010년대</option>
+
+<option>2020년대</option>
+
+</select>
+
+<textarea id="extra" placeholder="추가 요청: 예) 1980년대 서울 명동 거리, 옛날 교복"></textarea>
+
+<button class="mainbtn" id="historyPrompt">시대 재현 요청문 만들기</button>
+
+</section>
+
+<section class="panel">
+
+<h2>05. AI 요청문</h2>
+
+<div class="output" id="output">여기에 생성한 AI 요청문이 표시됩니다.</div>
+
+<button class="mainbtn" id="copy">요청문 복사하기</button>
+
+</section>
+
+<section class="panel">
+
+<h2>06. 사진 결과 및 저장</h2>
+
 <div id="results">
-<p class="note">사진을 업로드하고 시대를 선택하면 결과가 여기에 표시됩니다.</p>
+
+<p>사진을 업로드하고 시대를 선택해 주세요.</p>
+
 </div>
+
 </section>
-<p class="note">※ 현재 버전은 시대별 색감과 질감을 재현하는 사진 필터입니다. 의상, 인물, 배경을 실제 과거 모습으로 재구성하는 AI 기능은 추후 AI 서비스 연동이 필요합니다.</p>
+
+<p>안내: 시대별 사진 결과는 현재 색감 필터 방식입니다. 실제 나이 변화, 의상 및 배경 생성은 AI 이미지 생성 서비스가 별도로 필요합니다. 원본 얼굴 보존도 완벽히 보장되지는 않습니다.</p>
+
 </main>
-<footer>TIMEPORT © 2026 · EVERY PHOTO HAS A STORY</footer>
+
+<footer>TIMEPORT © 2026</footer>
 
 <script>
-const photo=document.getElementById('photo');
-const preview=document.getElementById('preview');
-const results=document.getElementById('results');
-let source=null;
 
-photo.addEventListener('change',()=>{
+let original=null;
+
+let selectedPrompt="";
+
+const photo=document.getElementById("photo");
+
+const preview=document.getElementById("preview");
+
+const output=document.getElementById("output");
+
+photo.addEventListener("change",()=>{
+
  const file=photo.files[0];
+
  if(!file)return;
+
+ if(!file.type.startsWith("image/")){
+
+  alert("이미지 파일을 선택해 주세요.");
+
+  return;
+
+ }
+
  const url=URL.createObjectURL(file);
+
  const img=new Image();
+
  img.onload=()=>{
-  source=img;
+
+  original=img;
+
   preview.src=url;
-  preview.style.display='block';
-  results.innerHTML='<p class="note">사진이 준비됐어요. 시대를 선택하고 비교하기를 눌러주세요.</p>';
+
+  preview.style.display="block";
+
+  document.getElementById("results").innerHTML="<p>사진 업로드 완료! 시대를 선택해 주세요.</p>";
+
  };
+
+ img.onerror=()=>alert("사진을 읽지 못했습니다. 다른 이미지를 선택해 주세요.");
+
  img.src=url;
+
 });
 
-document.querySelectorAll('.era').forEach(btn=>{
- btn.addEventListener('click',()=>{
-  btn.classList.toggle('active');
+document.querySelectorAll("#eras button,#ages button").forEach(button=>{
+
+ button.addEventListener("click",()=>{
+
+  button.classList.toggle("active");
+
  });
+
 });
 
-const styles={
- 1950:{filter:'sepia(0.8) grayscale(0.45) contrast(1.15)',label:'1950년대 · 클래식 흑백'},
- 1960:{filter:'sepia(0.55) saturate(0.65) contrast(1.08)',label:'1960년대 · 빈티지'},
- 1970:{filter:'sepia(0.38) saturate(1.2) contrast(1.05)',label:'1970년대 · 웜 필름'},
- 1980:{filter:'saturate(1.45) contrast(1.12)',label:'1980년대 · 레트로'},
- 1990:{filter:'saturate(0.8) contrast(1.08) brightness(1.04)',label:'1990년대 · 아날로그'},
- 2000:{filter:'saturate(1.15) contrast(1.04)',label:'2000년대 · 디지털'},
- 2010:{filter:'saturate(0.95) contrast(1.04) brightness(1.04)',label:'2010년대 · 모던'},
- 2020:{filter:'none',label:'2020년대 · 현재'}
+const filters={
+
+1950:["sepia(0.8) grayscale(.4) contrast(1.15)","1950년대 흑백 필름"],
+
+1960:["sepia(.5) saturate(.7) contrast(1.1)","1960년대 빈티지"],
+
+1970:["sepia(.35) saturate(1.2)","1970년대 웜 필름"],
+
+1980:["saturate(1.5) contrast(1.12)","1980년대 레트로"],
+
+1990:["saturate(.8) contrast(1.08)","1990년대 아날로그"],
+
+2000:["saturate(1.15)","2000년대 디지털"],
+
+2010:["saturate(.95) brightness(1.04)","2010년대 모던"],
+
+2020:["none","2020년대 현재"]
+
 };
 
-document.getElementById('generate').addEventListener('click',()=>{
- if(!source){alert('먼저 사진을 업로드해주세요.');return;}
- const selected=[...document.querySelectorAll('.era.active')].map(b=>b.dataset.year);
- if(!selected.length){alert('시대를 하나 이상 선택해주세요.');return;}
- results.innerHTML='';
- selected.forEach(year=>{
-  const style=styles[year];
-  const card=document.createElement('div');
-  card.className='result';
-  const canvas=document.createElement('canvas');
-  const max=1000;
-  const scale=Math.min(1,max/source.width,max/source.height);
-  canvas.width=Math.round(source.width*scale);
-  canvas.height=Math.round(source.height*scale);
-  const ctx=canvas.getContext('2d');
-  ctx.filter=style.filter;
-  ctx.drawImage(source,0,0,canvas.width,canvas.height);
-  ctx.filter='none';
-  const title=document.createElement('strong');
-  title.textContent=style.label;
-  const save=document.createElement('button');
-  save.textContent='사진 저장하기';
-  save.addEventListener('click',()=>{
-   const link=document.createElement('a');
-   link.download='TIMEPORT_'+year+'.jpg';
-   link.href=canvas.toDataURL('image/jpeg',0.92);
+document.getElementById("generate").addEventListener("click",()=>{
+
+ if(!original){alert("먼저 사진을 업로드해 주세요.");return;}
+
+ const years=[...document.querySelectorAll("#eras button.active")].map(b=>b.dataset.year);
+
+ if(!years.length){alert("시대를 선택해 주세요.");return;}
+
+ const results=document.getElementById("results");
+
+ results.innerHTML="";
+
+ years.forEach(year=>{
+
+  const card=document.createElement("div");
+
+  card.className="result";
+
+  const canvas=document.createElement("canvas");
+
+  const scale=Math.min(1,1200/original.width,1200/original.height);
+
+  canvas.width=Math.round(original.width*scale);
+
+  canvas.height=Math.round(original.height*scale);
+
+  const ctx=canvas.getContext("2d");
+
+  ctx.filter=filters[year][0];
+
+  ctx.drawImage(original,0,0,canvas.width,canvas.height);
+
+  ctx.filter="none";
+
+  const title=document.createElement("strong");
+
+  title.textContent=filters[year][1];
+
+  const save=document.createElement("button");
+
+  save.textContent="사진 저장";
+
+  save.addEventListener("click",()=>{
+
+   const link=document.createElement("a");
+
+   link.download="TIMEPORT_"+year+".jpg";
+
+   link.href=canvas.toDataURL("image/jpeg",.92);
+
    link.click();
+
   });
+
   card.append(canvas,title,save);
+
   results.appendChild(card);
+
  });
+
 });
+
+function makePrompt(text){
+
+ selectedPrompt=text;
+
+ output.textContent=text;
+
+}
+
+document.getElementById("agePrompt").addEventListener("click",()=>{
+
+ const ages=[...document.querySelectorAll("#ages button.active")].map(b=>b.dataset.age);
+
+ if(!ages.length){alert("나이대를 선택해 주세요.");return;}
+
+ makePrompt(
+
+ "업로드한 원본 사진의 인물을 "+ages.join(", ")+" 모습으로 사실적으로 표현해 주세요. "+
+
+ "동일 인물임을 알아볼 수 있도록 얼굴형, 눈, 코, 입의 형태와 위치, 피부색, 고유한 특징을 최대한 보존해 주세요. "+
+
+ "나이대에 맞는 피부 탄력, 주름, 눈가, 목, 얼굴 윤곽, 머리카락의 색과 질감을 자연스럽게 변화시켜 주세요. "+
+
+ "과장된 노화나 인위적인 미용 필터를 피하고 실제 인물 사진처럼 섬세한 피부 질감과 자연스러운 조명을 사용해 주세요. "+
+
+ "여러 나이대를 함께 표현한다면 각 나이대가 명확히 구분되면서도 동일 인물로 보여야 합니다. "+
+
+ "얼굴의 해부학적 구조와 원본 구도를 유지하고 얼굴을 흐리게 만들지 마세요."
+
+ );
+
+});
+
+document.getElementById("historyPrompt").addEventListener("click",()=>{
+
+ const era=document.getElementById("era").value;
+
+ const extra=document.getElementById("extra").value.trim();
+
+ makePrompt(
+
+ "원본 사진을 "+era+" 시대에 촬영한 실제 사진처럼 재현해 주세요. "+
+
+ "인물의 얼굴 정체성, 눈, 코, 입, 얼굴형, 피부색, 표정, 신체 비율을 최대한 유지해 주세요. "+
+
+ era+" 시대에 맞는 의상, 옷감, 신발, 헤어스타일, 액세서리와 소품을 역사적 고증에 맞게 표현해 주세요. "+
+
+ "배경의 건축물, 거리, 실내 가구, 간판, 차량과 생활용품도 해당 시대에 맞춰 변경해 주세요. "+
+
+ "시대에 어울리는 필름 입자, 카메라 색감, 자연스러운 조명과 사진 인화 질감을 표현해 주세요. "+
+
+ "현대적인 물건은 제거하고 합성 티가 나지 않는 고해상도 실사 사진으로 만들어 주세요. "+
+
+ "얼굴 디테일은 선명하게 유지해 주세요. "+
+
+ (extra?"추가 요청: "+extra:"")
+
+ );
+
+});
+
+document.getElementById("copy").addEventListener("click",async()=>{
+
+ if(!selectedPrompt){alert("먼저 요청문을 생성해 주세요.");return;}
+
+ try{
+
+  await navigator.clipboard.writeText(selectedPrompt);
+
+  alert("요청문을 복사했습니다.");
+
+ }catch(error){
+
+  const area=document.createElement("textarea");
+
+  area.value=selectedPrompt;
+
+  document.body.appendChild(area);
+
+  area.select();
+
+  const success=document.execCommand("copy");
+
+  area.remove();
+
+  alert(success?"요청문을 복사했습니다.":"복사에 실패했습니다. 요청문을 길게 눌러 복사해 주세요.");
+
+ }
+
+});
+
 </script>
+
 </body>
+
 </html>
